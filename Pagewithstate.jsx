@@ -68,7 +68,7 @@ function Posts(){
 }
 
 
-function (){
+function Pagination(){
  const { postsPerPage, totalPosts, paginate, nextPage, prevPage } = this.props;
 
         const pageNumbers = [];
