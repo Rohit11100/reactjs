@@ -1,11 +1,13 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect,Fragment } from "react";
 import { nanoid } from "nanoid";
 import "./style/curdarr.css";
-import { Form } from 'react-advanced-form';
 
 
 
-const App = () => {
+
+
+
+const CurdArr = () => {
      let data= []
 
       
@@ -42,8 +44,7 @@ const App = () => {
 
    
     
-    console.log(contacts);
-
+   
     setAddFormData(newFormData);
   };
 
@@ -59,7 +60,7 @@ const App = () => {
     setEditFormData(newFormData);
   };
 
-  const handleAddFormSubmit = (event, form) => {
+  const handleAddFormSubmit = (event) => {
     event.preventDefault();
 
     const newContact = {
@@ -72,10 +73,23 @@ const App = () => {
 
     const newContacts = [...contacts, newContact];
     setContacts(newContacts);
-    form.reset()
+
+
+
+    ///////////////////////////////////////////////
+    document.getElementById("myForm").reset();
+   
+
 
 
   };
+
+ 
+ 
+
+
+
+
 
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
@@ -127,7 +141,7 @@ const App = () => {
   };
   
 
-;
+
   return (
     <div className="app-container">
       <form onSubmit={handleEditFormSubmit}>
@@ -171,7 +185,7 @@ const App = () => {
       </form>
 
       <h2>Add a Contact</h2>
-      <form onSubmit={handleAddFormSubmit}>
+      <form onSubmit={handleAddFormSubmit}  id="myForm"  >
         <input
           type="text"
           name="fullName"
@@ -200,13 +214,13 @@ const App = () => {
           placeholder="Enter an email..."
           onChange={handleAddFormChange}
         />
-        <button type="submit">Add</button>
+        <button type="submit" >Add</button>
       </form>
     </div>
   );
 };
 
-export default App;
+export default CurdArr;
 
 
 
