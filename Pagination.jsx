@@ -3,6 +3,9 @@
 import ReactPaginate from "react-paginate";
 import { useEffect, useState } from "react";
 
+
+import { Table } from 'react-bootstrap';
+
 function Pagination() {
   const [items, setItems] = useState([]);
 
@@ -13,26 +16,40 @@ function Pagination() {
   useEffect(() => {
     const getComments = async () => {
       const res = await fetch(
-        `http://localhost:3004/comments?_page=1&_limit=${limit}`
-        // `https://jsonplaceholder.typicode.com/comments?_page=1&_limit=${limit}`
+        ` https://api.instantwebtools.net/v1/passenger?page=1&size=${limit}`
       );
       const data = await res.json();
-      const total = res.headers.get("x-total-count");
+
+      const total = data.totalPassengers;
+      console.log(total);
+
       setpageCount(Math.ceil(total / limit));
-      // console.log(Math.ceil(total/12));
-      setItems(data);
+
+      let my = data.data.map((q) => {
+
+        return q.airline[0]
+      })
+
+      setItems(my);
+
     };
 
     getComments();
   }, [limit]);
 
+
   const fetchComments = async (currentPage) => {
     const res = await fetch(
-      `http://localhost:3004/comments?_page=${currentPage}&_limit=${limit}`
-      // `https://jsonplaceholder.typicode.com/comments?_page=${currentPage}&_limit=${limit}`
+      ` https://api.instantwebtools.net/v1/passenger?page=${currentPage}&size=${limit}`
+
     );
     const data = await res.json();
-    return data;
+
+    let my = data.data.map((q) => {
+
+      return q.airline[0]
+    })
+    return my;
   };
 
   const handlePageClick = async (data) => {
@@ -43,28 +60,57 @@ function Pagination() {
     const commentsFormServer = await fetchComments(currentPage);
 
     setItems(commentsFormServer);
-    // scroll to the top
-    //window.scrollTo(0, 0)
+  
   };
   return (
-    <div className="container">
-      <div className="row m-2">
-        {items.map((item) => {
-          return (
-            <div key={item.id} className="col-sm-6 col-md-4 v my-2">
-              <div className="card shadow-sm w-100" style={{ minHeight: 225 }}>
-                <div className="card-body">
-                  <h5 className="card-title text-center h2">Id :{item.id} </h5>
-                  <h6 className="card-subtitle mb-2 text-muted text-center">
-                    {item.email}
-                  </h6>
-                  <p className="card-text">{item.body}</p>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+
+
+
+    <div className='container'>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>country</th>
+            <th>slogan</th>
+            <th>logo</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+
+          {
+            items.map((w)=>{
+              console.log(w);
+
+              return(
+                <tr>
+            <td>{w.name}</td>
+            <td>{w.country}</td>
+            <td>{w.slogan}</td>
+            <td>
+                <img  src={w.logo}  height='30px'/>
+
+            </td>
+          </tr>
+              )
+            })
+          }
+          
+         
+        </tbody>
+      </Table>
+
+
+
+
+
+
+
+
+
+
 
       <ReactPaginate
         previousLabel={"previous"}
@@ -85,6 +131,7 @@ function Pagination() {
         breakLinkClassName={"page-link"}
         activeClassName={"active"}
       />
+
     </div>
   );
 }
